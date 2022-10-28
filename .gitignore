@@ -35,3 +35,15 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+### personal
+
+**/logs
+**/build
+**/.gradle
+**/gradle
+**/.idea
+**/gradlew
+**/gradlew.bat
+
