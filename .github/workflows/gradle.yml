@@ -32,8 +32,9 @@ jobs:
       uses: gradle/gradle-build-action@v2
     - name: build
       run: |
-         cd restful-web-services
+         ls -lrta
          chmod +x ${{ github.workspace }}/gradlew
+         cd restful-web-services
          ls -lrta
          gradle -v
          ./gradlew clean build
