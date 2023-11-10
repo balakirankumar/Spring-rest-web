@@ -33,6 +33,7 @@ jobs:
     - name: build
       run: |
          cd restful-web-services
+         chmod +x ${{ github.workspace }}/gradlew
          ls -lrta
          gradle -v
          ./gradlew clean build
