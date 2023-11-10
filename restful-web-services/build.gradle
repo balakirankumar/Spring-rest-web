@@ -6,7 +6,12 @@ plugins {
 
 group = 'com.first.rest.webservices'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
+//sourceCompatibility = '1.8'
+
+
+wrapper.gradleVersion = '7.0.1'
+sourceCompatibility = 13
+targetCompatibility = 13
 
 repositories {
 	mavenCentral()
