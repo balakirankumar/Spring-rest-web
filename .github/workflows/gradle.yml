@@ -35,6 +35,7 @@ jobs:
          ls -lrta
          gradle -v
          gradle clean build
+         cd ${{ github.workspace }}/build
          ls -lrta
       
       
