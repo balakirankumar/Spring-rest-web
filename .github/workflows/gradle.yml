@@ -35,7 +35,7 @@ jobs:
          ls -lrta
          cd ${{ github.workspace }}/restful-web-services
          ls -lrta
-         chmod +x ${{ github.workspace }}/gradlew
+         chmod u+wrx ${{ github.workspace }}/gradlew
          ls -lrta
          gradle -v
          ./gradlew clean build
