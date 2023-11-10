@@ -33,6 +33,7 @@ jobs:
     - name: build
       run: |
          ls -lrta
-         gradlew clean buid
+         gradle -v
+         gradle clean build
       
       
