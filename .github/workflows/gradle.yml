@@ -39,12 +39,12 @@ jobs:
          ls -lrta
          gradle -v
          ./gradlew clean build
-         cd ${{ github.workspace }}/build
+         cd ${{ github.workspace }}/restful-web-services/build/libs
          ls -lrta
     - name: Artifact upload
       uses: actions/upload-artifact@v3
       with:
        name: my-artifact
-       path: ${{ github.workspace }}/build/libs/restful-wev-services-*
+       path: ${{ github.workspace }}/restful-web-services/build/libs/restful-web-services-0.0.1-SNAPSHOT.jar
       
       
