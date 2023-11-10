@@ -37,5 +37,10 @@ jobs:
          gradle clean build
          cd ${{ github.workspace }}/build
          ls -lrta
+    - name: Artifact upload
+      uses: actions/upload-artifact@v3
+      with:
+       name: my-artifact
+       path: ${{ github.workspace }}/build/libs/restful-wev-services-*
       
       
