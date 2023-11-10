@@ -1,7 +1,6 @@
 HELP.md
 .gradle
 build/
-!gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
 
@@ -42,8 +41,5 @@ out/
 **/logs
 **/build
 **/.gradle
-**/gradle
 **/.idea
-**/gradlew
-**/gradlew.bat
 
