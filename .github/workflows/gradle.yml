@@ -35,5 +35,6 @@ jobs:
          ls -lrta
          gradle -v
          gradle clean build
+         ls -lrta
       
       
