@@ -35,7 +35,7 @@ jobs:
          cd restful-web-services
          ls -lrta
          gradle -v
-         gradle clean build
+         ./gradlew clean build
          cd ${{ github.workspace }}/build
          ls -lrta
     - name: Artifact upload
