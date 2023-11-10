@@ -7,7 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class PostServiceImpl extends  BeanInjectionService implements PostService {
@@ -22,6 +22,7 @@ public class PostServiceImpl extends  BeanInjectionService implements PostServic
 
     public Post createPost(UserProfile userProfile, com.first.rest.webservices.mediatype.Post post){
         Post postDomain = populatePostEntity(userProfile,post);
+        postDomain.setId(UUID.randomUUID().toString());
         return postsRepository.save(postDomain);
     }
 
@@ -33,7 +34,7 @@ public class PostServiceImpl extends  BeanInjectionService implements PostServic
     Post populatePostEntity(UserProfile userProfile, com.first.rest.webservices.mediatype.Post post){
     Post post1 = new Post();
     BeanUtils.copyProperties(post,post1);
+    post1.setUserProfile(userProfile);
     return post1;
-
     }
 }

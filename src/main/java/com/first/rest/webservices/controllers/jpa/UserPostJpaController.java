@@ -8,10 +8,14 @@ import com.first.rest.webservices.exception.constants.StatusCode;
 import com.first.rest.webservices.exception.exceptions.BadRequestException;
 import com.first.rest.webservices.exception.exceptions.NotFoundException;
 import com.first.rest.webservices.mediatype.Post;
-import com.first.rest.webservices.service.PostService;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.server.EntityLinks;
+import org.springframework.hateoas.server.ExposesResourceFor;
+import org.springframework.hateoas.server.LinkBuilder;
+import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,13 +31,11 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(value = ControllerMappings.POSTS_JPA)
+@RequestMapping(value = ControllerMappings.POSTS_JPA, produces = MediaTypes.HAL_JSON_VALUE)
+@ExposesResourceFor(Post.class)
 public class UserPostJpaController extends BaseController {
 
     private static final AppLogger LOGGER = AppLogger.getLogger(com.first.rest.webservices.controllers.jpa.UserPostJpaController.class);
-
-    @Autowired
-    private PostService postService;
 
     @RequestMapping(method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<EntityModel<Post>>> getPosts(@PathVariable String userId){
@@ -48,11 +50,7 @@ public class UserPostJpaController extends BaseController {
         List<EntityModel<Post>> userPosts=new ArrayList<>();
         userPostDomainList.forEach(postDomain -> {
             Post postMediaType = getPostMediaType(postDomain);
-            EntityModel<Post> model = EntityModel.of(postMediaType);
-            WebMvcLinkBuilder link = linkTo(methodOn(this.getClass()).getPosts(postMediaType.getId()));
-            model.add(link.withRel("self"));
-            link = linkTo(methodOn(UserProfileJpaController.class).getUser(userId));
-            model.add(link.withRel("users"));
+            EntityModel<Post> model = new PostResourceAssemblerImpl<Post>(entityLinks).toModel(postMediaType);
             userPosts.add(model);
         });
         return new ResponseEntity<>(userPosts, HttpStatus.OK);
@@ -141,5 +139,30 @@ public class UserPostJpaController extends BaseController {
                 .description(postDomain.getDescription())
                 .title(postDomain.getTitle()).build();
         return postMedia;
+    }
+
+
+    public class  PostResourceAssemblerImpl<T> implements RepresentationModelAssembler<T,EntityModel<T>> {
+
+        private final EntityLinks entityLinks;
+
+        public PostResourceAssemblerImpl(EntityLinks entityLinks) {
+            this.entityLinks = entityLinks;
+        }
+
+        @Override
+        public EntityModel<T> toModel(T entity) {
+            EntityModel<T> resource = EntityModel.of(entity);
+            LinkBuilder lb = entityLinks.linkFor(Post.class,"1");
+            String postId  = ((Post)entity).getId();
+            resource.add(lb.slash(postId).withSelfRel());
+            resource.add(entityLinks.linkFor(com.first.rest.webservices.mediatype.UserProfile.class).withRel("links:users"));
+            return resource;
+        }
+
+        @Override
+        public CollectionModel toCollectionModel(Iterable entities) {
+            return RepresentationModelAssembler.super.toCollectionModel(entities);
+        }
     }
 }

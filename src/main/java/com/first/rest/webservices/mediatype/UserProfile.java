@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
+import org.springframework.hateoas.server.ExposesResourceFor;
+import org.springframework.hateoas.server.core.Relation;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -14,11 +16,11 @@ import java.util.List;
 @Data
 @SuperBuilder
 @AllArgsConstructor
+@Relation(collectionRelation = "content")
 public class UserProfile {
 
     @JsonPropertyDescription("The unique identifier of the User")
     private String id;
-
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotNull
@@ -29,6 +31,9 @@ public class UserProfile {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String lastName;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String password;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotNull

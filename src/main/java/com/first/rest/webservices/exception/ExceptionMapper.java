@@ -2,8 +2,10 @@ package com.first.rest.webservices.exception;
 
 import com.first.rest.webservices.exception.constants.StatusCode;
 import com.first.rest.webservices.exception.exceptions.BadRequestException;
+import com.first.rest.webservices.exception.exceptions.ForBiddenException;
 import com.first.rest.webservices.exception.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -68,14 +70,42 @@ public class ExceptionMapper {
         return msg;
     }
 
+    @ExceptionHandler(ForBiddenException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseBody
+    public ErrorMessage forBiddenError(ForBiddenException e, HttpServletResponse response) {
+//        LOGGER.debug(e.getDeveloperMessage(), e.getCause());
+        ErrorMessage msg = new ErrorMessage();
+        msg.setStatus(HttpStatus.FORBIDDEN.getReasonPhrase());
+        msg.setCode(HttpStatus.FORBIDDEN.value());
+        msg.setMessage(StatusCode._403.getDescription());
+        msg.setDeveloperMessage(e.getDeveloperMessage());
+        return msg;
+    }
+
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseBody
+    public ErrorMessage userNotFound(UsernameNotFoundException e, HttpServletResponse response) {
+//        LOGGER.debug(e.getDeveloperMessage(), e.getCause());
+        ErrorMessage msg = new ErrorMessage();
+        msg.setStatus(HttpStatus.UNAUTHORIZED.getReasonPhrase());
+        msg.setCode(HttpStatus.UNAUTHORIZED.value());
+        msg.setMessage(StatusCode._401.getDescription());
+        msg.setDeveloperMessage(e.getMessage());
+        return msg;
+    }
+
+
     @ExceptionHandler(BadRequestException.class)
-    @ResponseStatus(HttpStatus.BAD_GATEWAY)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public ErrorMessage badRequestException(BadRequestException e, HttpServletResponse response) {
 //        LOGGER.debug(e.getDeveloperMessage(), e.getCause());
         ErrorMessage msg = new ErrorMessage();
         msg.setStatus(HttpStatus.BAD_REQUEST.getReasonPhrase());
-        msg.setCode(HttpStatus.BAD_GATEWAY.value());
+        msg.setCode(HttpStatus.BAD_REQUEST.value());
         msg.setMessage(e.getMessage());
         msg.setDeveloperMessage(e.getDeveloperMessage());
         return msg;

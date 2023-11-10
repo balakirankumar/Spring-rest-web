@@ -17,15 +17,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.supercsv.io.CsvBeanWriter;
+import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.prefs.CsvPreference;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-@RestController()
+@RestController
 @RequestMapping(value = ControllerMappings.USERS)
 public class UserController extends BaseController{
 
@@ -52,6 +58,31 @@ public class UserController extends BaseController{
             userProfileList.add(getUserProfileMediaType(userProfile));
         });
         return new ResponseEntity<>(userProfileList, HttpStatus.OK);
+
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/export", produces = "text/csv")
+    public void getUsersExport(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+
+        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
+        String[] csvHeader = { "Metric", "App name", "Subscripton name", "Entitlement", "Used"};
+        String[] nameMapping = { "id", "email", "firstName", "lastname", "birthDate"};
+        List<UserProfile> userProfileList = new ArrayList<>();
+        userProfilesDomain.forEach(userProfile -> {
+            userProfileList.add(getUserProfileMediaType(userProfile));
+        });
+
+        csvWriter.writeHeader(csvHeader);
+        for (UserProfile tpm : userProfileList) {
+            csvWriter.write(tpm, nameMapping);
+        }
+        response.setContentType("text/csv");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=users" + ".csv";
+        response.setHeader("file-name","users.csv");
+        response.setHeader(headerKey, headerValue);
+        csvWriter.close();
 
     }
 

@@ -2,10 +2,8 @@ package com.first.rest.webservices.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -16,10 +14,13 @@ public class Post {
     private String id;
 
     @NotNull
+    @Column(name = "title")
     private String title;
 
+    @Column(name = "description")
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private UserProfile userProfile;
 }
