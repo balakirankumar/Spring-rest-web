@@ -1,8 +1,10 @@
 package com.first.rest.webservices.service.impl;
 
+import com.first.rest.webservices.custom.actuator.MetricsIndicator;
 import com.first.rest.webservices.repository.*;
 import com.first.rest.webservices.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.hateoas.server.EntityLinks;
 import org.springframework.stereotype.Service;
@@ -48,6 +50,14 @@ public class BeanInjectionService {
 
     @Autowired
     public SecurityService securityService;
+
+    @Autowired
+    public MetricsIndicator metricsIndicator;
+
+    @Autowired
+    @Qualifier("restTemplate")
+    public RestTemplate restTemplate;
+
 
 //    @Autowired
 //    RestTemplate restTemplate;

@@ -32,9 +32,11 @@ dependencies {
 	implementation 'net.sf.supercsv:super-csv:2.4.0'
 	implementation 'org.flywaydb:flyway-core'
 	implementation 'org.postgresql:postgresql'
+	implementation 'org.apache.httpcomponents:httpclient'
+	implementation group: 'com.rometools', name: 'rome', version: '1.16.0'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-	runtimeOnly 'com.h2database:h2'
+//	runtimeOnly 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 	annotationProcessor 'org.projectlombok:lombok'

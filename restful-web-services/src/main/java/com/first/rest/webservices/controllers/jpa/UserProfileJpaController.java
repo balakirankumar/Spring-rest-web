@@ -3,6 +3,7 @@ package com.first.rest.webservices.controllers.jpa;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import com.first.rest.webservices.config.AppLogger;
+import com.first.rest.webservices.config.TimeLogger;
 import com.first.rest.webservices.controllers.BaseController;
 import com.first.rest.webservices.controllers.ControllerMappings;
 import com.first.rest.webservices.exception.constants.StatusCode;
@@ -64,6 +65,7 @@ public class UserProfileJpaController extends BaseController {
     }
 
 
+    @TimeLogger
     @RequestMapping(method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<EntityModel<UserProfile>>> getUsers(
             @RequestParam(name = "page", required = false,defaultValue = "1") int page,

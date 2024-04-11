@@ -45,6 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         httpSecurity.authorizeRequests().regexMatchers(ControllerMappings.TOKEN+ "(\\?.*)?").permitAll();
+        httpSecurity.authorizeRequests().regexMatchers("/actuator"+ "(\\?.*)?").permitAll();
 
         httpSecurity.authorizeRequests()
                 .regexMatchers(
@@ -66,7 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         ControllerMappings.ROLES +"(\\?.*)?")
                 .authenticated();
 
-        httpSecurity.authorizeRequests().anyRequest().authenticated();
+//        httpSecurity.authorizeRequests().anyRequest().authenticated();
 
         httpSecurity.addFilter(customAuthenticationFilter);
         httpSecurity.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

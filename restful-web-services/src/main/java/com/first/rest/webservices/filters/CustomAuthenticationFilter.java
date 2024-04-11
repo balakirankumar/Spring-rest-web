@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.first.rest.webservices.config.AppLogger;
+import com.first.rest.webservices.config.TimeLogger;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,6 +37,7 @@ public class CustomAuthenticationFilter  extends UsernamePasswordAuthenticationF
 
 
     @Override
+    @TimeLogger
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
@@ -45,12 +47,12 @@ public class CustomAuthenticationFilter  extends UsernamePasswordAuthenticationF
     }
 
     @Override
+    @TimeLogger
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
         User user = (User) authentication.getPrincipal();
         Algorithm algorithm = Algorithm.HMAC256("secret".getBytes(StandardCharsets.UTF_8));
         String access_token = JWT.create()
                 .withSubject(user.getUsername())
-
                 .withExpiresAt(new Date(System.currentTimeMillis()+10*60*1000))
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))

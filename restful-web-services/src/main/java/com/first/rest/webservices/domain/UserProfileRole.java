@@ -15,7 +15,7 @@ public class UserProfileRole {
     @Id
     private String id;
 
-    @JoinColumn(name = "userProfileId")
+    @JoinColumn(name = "userprofileId")
     @ManyToOne(fetch = FetchType.LAZY)
     private UserProfile userProfile;
 
